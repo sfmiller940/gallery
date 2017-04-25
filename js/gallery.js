@@ -1,34 +1,34 @@
 "use strict"
 window.onload = function(){
 
-  var renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  var images = [], 
+    numImages = 12,
+    galleryRadius = 2200,
+    galleryPhi = 2 * Math.PI / numImages,
+    galleryFov = 75,
+    imagesLoaded = false,
+    scene = new THREE.Scene(),
+    renderer = new THREE.WebGLRenderer(),
+    camera = new THREE.PerspectiveCamera( galleryFov , window.innerWidth / window.innerHeight, 1, 100 + galleryRadius),
+    loader = new THREE.TextureLoader(),
+    ambientLight = new THREE.AmbientLight(0xffffff),
+    controls = new THREE.TrackballControls( camera );
 
-  var camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 1, 1000); 
-  camera.position.y = -250; 
-  camera.position.z = 400; 
-  camera.rotation.x = 45 * (Math.PI / 180); 
+  scene.add(ambientLight);
 
-  var scene = new THREE.Scene();
-  scene.add(camera);
-
-  var numImages = 12;
-  var images = [];
-  THREE.TextureLoader.prototype.crossOrigin = '';
-  var loader = new THREE.TextureLoader();
-
-  for(let i = 0; i<numImages; i++){
+  loader = new THREE.TextureLoader()
+  loader.crossOrigin = '';
+  for(var i=0; i<numImages; i++){
     loader.load(
-      'https://unsplash.it/1024/512/?random',
+      'https://unsplash.it/1024/512/?random&nocache' + i,
       function ( texture ) {
-        var img = new THREE.MeshBasicMaterial( {
-          map: texture
-        });
-        images[i] = new THREE.Mesh(new THREE.PlaneGeometry(1024, 512),img);
-        images[i].minFilter = THREE.LinearFilter;
-        images[i].overdraw = true;
-        scene.add(images[i]);
+        var image = new THREE.Mesh(
+          new THREE.PlaneGeometry(1024, 512), 
+          new THREE.MeshBasicMaterial({ map: texture })
+        );
+        image.minFilter = THREE.LinearFilter;
+        image.overdraw = true;
+        images.push(image);
       },
       function ( xhr ) {
         console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -39,13 +39,21 @@ window.onload = function(){
     );
   }
 
-  var ambientLight = new THREE.AmbientLight(0x555555);
-  scene.add(ambientLight);
+  function addImages(){
+    for(var i = 0; i < images.length; i++){
+      images[i].rotation.y = - i * galleryPhi;
+      images[i].position.set(
+        galleryRadius * Math.sin( i * galleryPhi ),
+        0,
+        - galleryRadius * Math.cos( i * galleryPhi ) 
+      );
+      scene.add(images[i]);
+    }
+    imagesLoaded = true;
+  };
 
-  renderer.render(scene,camera);
-
+/*
   // Camera controls
-  var controls = new THREE.TrackballControls( camera );
   controls.rotateSpeed = 1.0;
   controls.zoomSpeed = 1.2;
   controls.panSpeed = 0.8;
@@ -55,10 +63,14 @@ window.onload = function(){
   controls.dynamicDampingFactor = 0.3;
   controls.keys = [ 65, 83, 68 ];
   controls.addEventListener( 'change', render );
+*/
 
-  var render = function () {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  function render () {
+    if( ! imagesLoaded && images.length === numImages) addImages();
+    //controls.update();
     renderer.render(scene, camera);
-    controls.update();
     requestAnimationFrame( render );
   }
   render();
@@ -68,4 +80,5 @@ window.onload = function(){
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
   }, false );
+
 };
