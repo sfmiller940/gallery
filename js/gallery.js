@@ -131,15 +131,17 @@ window.onload = function(){
   document.addEventListener(
     'mousemove',
     function(e){
+      var direction, gamma, newPos;
       if(mouseDown){
-        var newPos = camera.getWorldDirection()
-          .normalize()
-          .multiplyScalar( galleryRadius*(e.clientY - mouseDown.clientY)/window.innerWidth/10 )
-          .add( origin['position'] );
+        direction = camera.getWorldDirection();
+        gamma = galleryRadius / window.innerWidth / 20;
+        newPos = origin['position'].add( 
+          direction.multiplyScalar( gamma*(e.clientY - mouseDown.clientY) )
+        );
         if(shiftDown){
-          newPos.add( camera.getWorldDirection()
-            .applyAxisAngle( new THREE.Vector3(0,1,0), Math.PI / 2)
-            .multiplyScalar( galleryRadius*(e.clientX - mouseDown.clientX)/window.innerWidth/10 ) 
+          newPos.add( direction
+            .applyAxisAngle( new THREE.Vector3(0,1,0), -Math.PI / 2)
+            .multiplyScalar( gamma*(e.clientX - mouseDown.clientX) ) 
           );
         } else {
           camera.rotation.y = origin['angle'] + ( Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );
