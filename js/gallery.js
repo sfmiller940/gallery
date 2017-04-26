@@ -105,15 +105,16 @@ window.onload = function(){
   document.addEventListener(
     'keydown',
     function(e){ 
-      keyDown[e.keyCode]=true;
-      if( keyDown[189] === true ) camera.rotation.y += Math.PI;
+      keyDown[e.key]=true;
+      if( e.key === '-' ) camera.rotation.y += Math.PI;
+      console.log(e.key);
     },
     false
   );
 
   document.addEventListener(
     'keyup',
-    function(e){ keyDown[e.keyCode]=false; },
+    function(e){ keyDown[e.key]=false; },
     false
   );
 
@@ -145,7 +146,7 @@ window.onload = function(){
         newPos = camera.getWorldDirection()
           .multiplyScalar( gamma * (e.clientY - mouseDown.clientY) )
           .add( origin['position'] );
-        if(keyDown[16]){
+        if(keyDown['Shift']){
           newPos.add( camera.getWorldDirection()
             .applyAxisAngle( yaxis, - Math.PI / 2)
             .multiplyScalar( gamma * (e.clientX - mouseDown.clientX) ) 
@@ -163,16 +164,16 @@ window.onload = function(){
 
   function keyNav(){
     var newPos = new THREE.Vector3(0,0,0);
-    if( keyDown[37] || keyDown[39] || keyDown[38] || keyDown[40] ){
+    if( keyDown['ArrowLeft'] || keyDown['ArrowRight'] || keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
       document.body.classList.add('keyDown');
-      if( keyDown[38] || keyDown[40] ){
-        newPos.add( camera.getWorldDirection().multiplyScalar( keyDown[38] ? 1 : -1 ) );
+      if( keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
+        newPos.add( camera.getWorldDirection().multiplyScalar( keyDown['ArrowUp'] ? 1 : -1 ) );
       }
-      if( keyDown[37] || keyDown[39]){
-        if( keyDown[16] ){
-          newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown[37] ? 1 : -1) * Math.PI / 2));
+      if( keyDown['ArrowLeft'] || keyDown['ArrowRight']){
+        if( keyDown['Shift'] ){
+          newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 2));
         } else {
-          camera.rotation.y += (keyDown[37] ? 1 : -1) * Math.PI / 720;
+          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 720;
         }
       }
       newPos.add( camera.position );
