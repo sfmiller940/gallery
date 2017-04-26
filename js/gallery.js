@@ -8,6 +8,7 @@ window.onload = function(){
     mouseDown = false,
     shiftDown = false,
     origin,
+    yaxis = new THREE.Vector3(0,1,0),
     scene = new THREE.Scene(),
     renderer = new THREE.WebGLRenderer(),
     loader = new THREE.TextureLoader(),
@@ -131,16 +132,15 @@ window.onload = function(){
   document.addEventListener(
     'mousemove',
     function(e){
-      var direction, gamma, newPos;
+      var gamma, newPos;
       if(mouseDown){
-        direction = camera.getWorldDirection();
         gamma = galleryRadius / window.innerWidth / 20;
-        newPos = origin['position'].add( 
-          direction.multiplyScalar( gamma*(e.clientY - mouseDown.clientY) )
-        );
+        newPos = camera.getWorldDirection()
+          .multiplyScalar( gamma*(e.clientY - mouseDown.clientY) )
+          .add( origin['position'] );
         if(shiftDown){
-          newPos.add( direction
-            .applyAxisAngle( new THREE.Vector3(0,1,0), -Math.PI / 2)
+          newPos.add( camera.getWorldDirection()
+            .applyAxisAngle( yaxis, - Math.PI / 2)
             .multiplyScalar( gamma*(e.clientX - mouseDown.clientX) ) 
           );
         } else {
