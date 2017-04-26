@@ -20,9 +20,15 @@ canvas{
 
 #button--loadImages{
   background: #fff;
+  font-size: 1.5rem;
   text-transform: uppercase;
-  color: green;
+  color: purple;
   font-weight: bold;
+  background: pink;
+  border: 2px solid teal;
+  border-radius: 0.5rem;
+  box-shadow: none;
+  cursor: pointer;
 }
 
 #spinner{
