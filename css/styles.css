@@ -38,11 +38,11 @@ canvas{
   position: absolute;
   width: 100%;
   top: 50%;
-  color: white;
+  color: #fff;
   font-size: 8rem;
   margin-top: -4rem;
   text-align: center;
-  opacity: 0.8;
+  opacity: 0.5;
   pointer-events: none;
   transition: opacity 0.4s;
 }
@@ -64,6 +64,7 @@ canvas{
   transition: opacity 0.4s;
 }
 
-.mouseDown #bullseye{
+.mouseDown #bullseye,
+.keyDown #bullseye{
   opacity: 0.5;  
 }

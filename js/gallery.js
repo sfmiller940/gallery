@@ -70,11 +70,12 @@ window.onload = function(){
       scene.add(image);
     });
     imagesLoaded = true;
-    document.body.className += " imagesLoaded";
+    document.body.classList.add('imagesLoaded');
   }
 
   function render () {
     if( ! imagesLoaded && images.length === numImages) addImages();
+    keyNav();
     renderer.render(scene, camera);
     requestAnimationFrame( render );
   }
@@ -106,7 +107,6 @@ window.onload = function(){
     'keydown',
     function(e){ 
       keyDown[e.keyCode]=true;
-      console.log( e.keyCode );
       if( keyDown[189] === true ) camera.rotation.y += Math.PI;
     },
     false
@@ -132,7 +132,7 @@ window.onload = function(){
     function(e){
       mouseDown = e;
       origin = { 'angle' : camera.rotation.y, 'position' : camera.position };
-      document.body.className += " mouseDown";
+      document.body.classList.add('mouseDown');
     },
     false
   );
@@ -161,4 +161,28 @@ window.onload = function(){
     },
     false
   );
+
+  function keyNav(){
+    if( keyDown[37] || keyDown[39] || keyDown[38] || keyDown[40] ){
+      document.body.classList.add('keyDown');
+      var newPos = new THREE.Vector3(0,0,0);
+      if( keyDown[38] || keyDown[40] ){
+        newPos.add( camera.getWorldDirection().multiplyScalar( keyDown[38] ? 1 : -1 ) );
+      }
+      if( keyDown[37] || keyDown[39]){
+        if( keyDown[16] ){
+          newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown[37] ? 1 : -1) * Math.PI / 2));
+        } else {
+          camera.rotation.y += (keyDown[37] ? 1 : -1) * Math.PI / 720;
+        }
+      }
+      newPos.add( camera.position );
+      if( newPos.length() < 0.9 * galleryRadius ){
+        camera.position.set( newPos.x, newPos.y, newPos.z );
+      }
+    }
+    else{
+      document.body.classList.remove('keyDown')
+    }
+  }
 };
