@@ -24,6 +24,13 @@ window.onload = function(){
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+  function render() {
+    if( ! imagesLoaded && images.length === numImages) addImages();
+    keyNav();
+    renderer.render(scene, camera);
+    requestAnimationFrame( render );
+  }
+  render();
 
   loader = new THREE.TextureLoader();
   loader.crossOrigin = 'anonymous';
@@ -73,14 +80,6 @@ window.onload = function(){
     document.body.classList.add('imagesLoaded');
   }
 
-  function render () {
-    if( ! imagesLoaded && images.length === numImages) addImages();
-    keyNav();
-    renderer.render(scene, camera);
-    requestAnimationFrame( render );
-  }
-  render();
-
   window.addEventListener(
     'resize',
     function () {
@@ -119,20 +118,20 @@ window.onload = function(){
   );
 
   document.addEventListener(
-    'mouseup',
-    function(e){ 
-      mouseDown = false;
-      document.body.classList.remove('mouseDown');
-    },
-    false
-  );
-
-  document.addEventListener(
     'mousedown', 
     function(e){
       mouseDown = e;
       origin = { 'angle' : camera.rotation.y, 'position' : camera.position };
       document.body.classList.add('mouseDown');
+    },
+    false
+  );
+
+  document.addEventListener(
+    'mouseup',
+    function(e){ 
+      mouseDown = false;
+      document.body.classList.remove('mouseDown');
     },
     false
   );
@@ -163,9 +162,9 @@ window.onload = function(){
   );
 
   function keyNav(){
+    var newPos = new THREE.Vector3(0,0,0);
     if( keyDown[37] || keyDown[39] || keyDown[38] || keyDown[40] ){
       document.body.classList.add('keyDown');
-      var newPos = new THREE.Vector3(0,0,0);
       if( keyDown[38] || keyDown[40] ){
         newPos.add( camera.getWorldDirection().multiplyScalar( keyDown[38] ? 1 : -1 ) );
       }
