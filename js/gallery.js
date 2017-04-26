@@ -1,11 +1,9 @@
 "use strict"
 window.onload = function(){
 
-  var numImages = 12,
+  var numImages,
     images = [],
-    galleryRadius = 2200,
-    galleryPhi = 2 * Math.PI / numImages,
-    galleryFov = 75,
+    galleryRadius,
     imagesLoaded = false,
     mouseDown = false,
     origin,
@@ -14,10 +12,10 @@ window.onload = function(){
     loader = new THREE.TextureLoader(),
     ambientLight = new THREE.AmbientLight(0xffffff),
     camera = new THREE.PerspectiveCamera(
-      galleryFov,
+      75,
       window.innerWidth / window.innerHeight,
       0.1,
-      4 * galleryRadius
+      4 * 1024 * 16 / Math.PI
     );
 
   scene.add(ambientLight);
@@ -28,8 +26,10 @@ window.onload = function(){
   loader = new THREE.TextureLoader();
   loader.crossOrigin = 'anonymous';
   function loadImages(){
-    images = [];
     imagesLoaded = false;
+    images = [];
+    numImages = ( 1 * document.getElementById('numImages').value ) || 12;
+    galleryRadius = 1024 * numImages / Math.PI / 1.8;
     document.body.classList.remove('imagesLoaded');
     while(scene.children.length > 0){ scene.remove(scene.children[0]); }
     for(var i=0; i < numImages; i++){
@@ -56,6 +56,7 @@ window.onload = function(){
   loadImages();
 
   function addImages(){
+    var galleryPhi = 2 * Math.PI / numImages;
     images.forEach(function(image, i){
       image.rotation.y = - i * galleryPhi;
       image.position.set(
@@ -124,4 +125,10 @@ window.onload = function(){
     loadImages,
     false
   );
+
+  document.getElementById('numImages').addEventListener(
+    'change',
+    loadImages,
+    false
+  );  
 };
