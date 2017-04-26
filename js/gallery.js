@@ -6,7 +6,7 @@ window.onload = function(){
     galleryRadius,
     imagesLoaded = false,
     mouseDown = false,
-    shiftDown = false,
+    keyDown = [],
     origin,
     yaxis = new THREE.Vector3(0,1,0),
     scene = new THREE.Scene(),
@@ -104,19 +104,26 @@ window.onload = function(){
 
   document.addEventListener(
     'keydown',
-    function(e){ if(e.keyCode === 16) shiftDown=true; },
+    function(e){ 
+      keyDown[e.keyCode]=true;
+      console.log( e.keyCode );
+      if( keyDown[189] === true ) camera.rotation.y += Math.PI;
+    },
     false
   );
 
   document.addEventListener(
     'keyup',
-    function(e){ if(e.keyCode === 16) shiftDown=false; },
+    function(e){ keyDown[e.keyCode]=false; },
     false
   );
 
   document.addEventListener(
     'mouseup',
-    function(e){ mouseDown = false; },
+    function(e){ 
+      mouseDown = false;
+      document.body.classList.remove('mouseDown');
+    },
     false
   );
 
@@ -125,6 +132,7 @@ window.onload = function(){
     function(e){
       mouseDown = e;
       origin = { 'angle' : camera.rotation.y, 'position' : camera.position };
+      document.body.className += " mouseDown";
     },
     false
   );
@@ -136,12 +144,12 @@ window.onload = function(){
       if(mouseDown){
         gamma = galleryRadius / window.innerWidth / 20;
         newPos = camera.getWorldDirection()
-          .multiplyScalar( gamma*(e.clientY - mouseDown.clientY) )
+          .multiplyScalar( gamma * (e.clientY - mouseDown.clientY) )
           .add( origin['position'] );
-        if(shiftDown){
+        if(keyDown[16]){
           newPos.add( camera.getWorldDirection()
             .applyAxisAngle( yaxis, - Math.PI / 2)
-            .multiplyScalar( gamma*(e.clientX - mouseDown.clientX) ) 
+            .multiplyScalar( gamma * (e.clientX - mouseDown.clientX) ) 
           );
         } else {
           camera.rotation.y = origin['angle'] + ( Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );

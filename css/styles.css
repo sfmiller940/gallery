@@ -39,13 +39,31 @@ canvas{
   width: 100%;
   top: 50%;
   color: white;
-  font-size: 10rem;
-  margin-top: -5rem;
+  font-size: 8rem;
+  margin-top: -4rem;
   text-align: center;
   opacity: 0.8;
+  pointer-events: none;
   transition: opacity 0.4s;
 }
 
 .imagesLoaded #spinner{
   opacity: 0;
+}
+
+#bullseye{
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  color: #fff;
+  font-size: 6rem;
+  margin-top: -3rem;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.mouseDown #bullseye{
+  opacity: 0.5;  
 }
