@@ -27,26 +27,33 @@ window.onload = function(){
 
   loader = new THREE.TextureLoader();
   loader.crossOrigin = 'anonymous';
-  for(var i=0; i < numImages; i++){
-    loader.load(
-      'https://unsplash.it/1024/512/?random&nocache' + i,
-      function ( texture ) {
-        var image = new THREE.Mesh(
-          new THREE.PlaneGeometry(1024, 512), 
-          new THREE.MeshBasicMaterial({ map: texture })
-        );
-        image.minFilter = THREE.LinearFilter;
-        image.overdraw = true;
-        images.push(image);
-      },
-      function ( xhr ) {
-        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-      },
-      function ( xhr ) {
-        console.log( 'An error happened' );
-      }
-    );
+  function loadImages(){
+    images = [];
+    imagesLoaded = false;
+    document.body.classList.remove('imagesLoaded');
+    while(scene.children.length > 0){ scene.remove(scene.children[0]); }
+    for(var i=0; i < numImages; i++){
+      loader.load(
+        'https://unsplash.it/1024/512/?random&nocache' + i + Date.now(),
+        function ( texture ) {
+          var image = new THREE.Mesh(
+            new THREE.PlaneGeometry(1024, 512), 
+            new THREE.MeshBasicMaterial({ map: texture })
+          );
+          image.minFilter = THREE.LinearFilter;
+          image.overdraw = true;
+          images.push(image);
+        },
+        function ( xhr ) {
+          console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+        function ( xhr ) {
+          console.log( 'An error happened' );
+        }
+      );
+    }
   }
+  loadImages();
 
   function addImages(){
     images.forEach(function(image, i){
@@ -59,6 +66,7 @@ window.onload = function(){
       scene.add(image);
     });
     imagesLoaded = true;
+    document.body.className += "imagesLoaded";
   }
 
   function render () {
@@ -99,15 +107,21 @@ window.onload = function(){
       if(mouseDown){
         camera.rotation.y = origin['angle'] + ( Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );
         var newPosition = new THREE.Vector3( 
-          origin['position'].x+(camera.getWorldDirection().normalize().x*galleryRadius*(-e.clientY + mouseDown.clientY)/window.innerWidth/10),
+          origin['position'].x+(camera.getWorldDirection().normalize().x*galleryRadius*(e.clientY - mouseDown.clientY)/window.innerWidth/10),
           0,
-          origin['position'].z+(camera.getWorldDirection().normalize().z*galleryRadius*(-e.clientY + mouseDown.clientY)/window.innerWidth/10)
+          origin['position'].z+(camera.getWorldDirection().normalize().z*galleryRadius*(e.clientY - mouseDown.clientY)/window.innerWidth/10)
         );
         if( newPosition.length() < 0.9 * galleryRadius ){
           camera.position.set(newPosition.x, newPosition.y, newPosition.z);
         }
       }
     },
+    false
+  );
+
+  document.getElementById('button--loadImages').addEventListener(
+    'click',
+    loadImages,
     false
   );
 };
