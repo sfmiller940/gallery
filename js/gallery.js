@@ -28,8 +28,9 @@ window.onload = function(){
   function loadImages(){
     imagesLoaded = false;
     images = [];
-    numImages = ( 1 * document.getElementById('numImages').value ) || 12;
+    numImages = 1 * ( document.getElementById('numImages').value || 12 );
     galleryRadius = 1024 * numImages / Math.PI / 1.8;
+    if( camera.position.length() > galleryRadius ){ camera.position.set(0,0,0); }
     document.body.classList.remove('imagesLoaded');
     while(scene.children.length > 0){ scene.remove(scene.children[0]); }
     for(var i=0; i < numImages; i++){
@@ -67,7 +68,7 @@ window.onload = function(){
       scene.add(image);
     });
     imagesLoaded = true;
-    document.body.className += "imagesLoaded";
+    document.body.className += " imagesLoaded";
   }
 
   function render () {
@@ -107,13 +108,12 @@ window.onload = function(){
     function(e){
       if(mouseDown){
         camera.rotation.y = origin['angle'] + ( Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );
-        var newPosition = new THREE.Vector3( 
-          origin['position'].x+(camera.getWorldDirection().normalize().x*galleryRadius*(e.clientY - mouseDown.clientY)/window.innerWidth/10),
-          0,
-          origin['position'].z+(camera.getWorldDirection().normalize().z*galleryRadius*(e.clientY - mouseDown.clientY)/window.innerWidth/10)
-        );
-        if( newPosition.length() < 0.9 * galleryRadius ){
-          camera.position.set(newPosition.x, newPosition.y, newPosition.z);
+        var newPos = camera.getWorldDirection()
+          .normalize()
+          .multiplyScalar( galleryRadius*(e.clientY - mouseDown.clientY)/window.innerWidth/10 )
+          .add( origin['position'] );
+        if( newPos.length() < 0.9 * galleryRadius ){
+          camera.position.set( newPos.x, newPos.y, newPos.z);
         }
       }
     },
