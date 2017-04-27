@@ -56,6 +56,7 @@ canvas{
   border-radius: 0.5rem;
   color: yellow;
   background: rgba(0,0,255,0.5);
+  border: 1px solid white;
 }
 
 #close{
@@ -75,28 +76,61 @@ canvas{
   right: 2rem;
   text-align: center;
   background: rgba(0,255,0,0.5);
-  padding: 0.5rem;
-  border-radius: 0.5rem;}
+  color: pink;
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid white;
+  font-size: 1.25rem;
+}
 
 input[type="range"]{
+  display: inline-block;;
   cursor: pointer;
   width: 100%;
-  margin: 0;
+  margin: 0.25rem 0 0;
   padding: 0;
 }
 
 #loadImages{
   display: block;
-  background: #fff;
-  font-size: 1.5rem;
+  padding: 0.5rem;
   text-transform: uppercase;
   color: purple;
   font-weight: bold;
   background: pink;
-  border: 2px solid teal;
+  border: 1px solid purple;
   border-radius: 0.5rem;
   box-shadow: none;
   cursor: pointer;
   margin-top: 1rem;
   width: 100%;
+  font-size: 1.25rem;
+}
+
+.rangeDiv{
+  position: relative;
+  width: 100%;
+  width: 100%;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid gray;
+}
+
+.left{
+  float: left;
+  font-size: 1rem;
+}
+
+.right{
+  float: right;
+  font-size: 1rem;
+}
+
+.label{
+  position: absolute;
+  top: -0.25rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
 }
