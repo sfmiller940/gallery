@@ -1,17 +1,19 @@
-html, body {
+html,body{
   margin: 0;
   padding: 0;
   font-size: 12px;
-  font-family: Droid, arial, sans-serif; }
+  font-family: Droid, arial, sans-serif;
+}
 
-canvas {
+canvas{
   display: block;
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
-#bullseye {
+#bullseye{
   position: absolute;
   width: 100%;
   top: 50%;
@@ -21,11 +23,15 @@ canvas {
   text-align: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s; }
-  .mouseDown #bullseye, .keyDown #bullseye {
-    opacity: 0.5; }
+  transition: opacity 0.4s;
 
-#spinner {
+  .mouseDown &,
+  .keyDown &{
+    opacity: 0.5;  
+  }
+}
+
+#spinner{
   position: absolute;
   width: 100%;
   top: 50%;
@@ -35,52 +41,65 @@ canvas {
   text-align: center;
   opacity: 0.5;
   pointer-events: none;
-  transition: opacity 0.4s; }
-  .imagesLoaded #spinner {
-    opacity: 0; }
-  #spinner #loading {
+  transition: opacity 0.4s;
+
+  .imagesLoaded &{
+    opacity: 0;
+  }
+
+  #loading{
     display: inline-block;
     width: 20rem;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255,255,255,0.5);
     padding: 0.25rem;
-    border-radius: 0.5rem;
-    border: 1px solid white; }
-  #spinner #loadingBar {
+    border-radius:  0.5rem;
+    border: 1px solid white;
+  }
+
+  #loadingBar{
     background: magenta;
     height: 1rem;
     width: 50%;
-    border-radius: 0.5rem; }
+    border-radius:  0.5rem;
+  }
+}
 
-#instructions {
+#instructions{
   position: absolute;
   top: 2rem;
   right: 2rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   color: yellow;
-  background: rgba(0, 0, 255, 0.5);
-  border: 1px solid white; }
-  #instructions #close {
+  background: rgba(0,0,255,0.5);
+  border: 1px solid white;
+
+  #close{
     text-align: right;
     font-size: 1.75rem;
-    cursor: pointer; }
-  #instructions .text {
-    margin: 0.5rem 0;
-    font-size: 1.2rem; }
+    cursor: pointer;
+  }
 
-#controls {
+  .text{
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+  }
+}
+
+#controls{
   position: absolute;
   bottom: 2rem;
   right: 2rem;
   text-align: center;
-  background: rgba(0, 255, 0, 0.5);
+  background: rgba(0,255,0,0.5);
   color: pink;
   padding: 2rem 0.5rem 1rem;
   border-radius: 0.5rem;
   border: 1px solid white;
   font-size: 1.25rem;
-  transition: all 0.4s; }
-  #controls #minMax {
+  transition: all 0.4s;
+
+  #minMax{
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -91,37 +110,52 @@ canvas {
     border-radius: 0.5rem;
     padding: 0 0.5rem;
     cursor: pointer;
-    transition: all 0.4s; }
-  #controls input[type="range"] {
-    display: inline-block;
+    transition: all 0.4s;
+  }
+
+  input[type="range"]{
+    display: inline-block;;
     cursor: pointer;
     width: 100%;
     margin: 0.25rem 0 0;
-    padding: 0; }
-  #controls .rangeDiv {
+    padding: 0;
+  }
+
+  .rangeDiv{
     position: relative;
     width: 100%;
     width: 100%;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.4s; }
-    #controls .rangeDiv:first-child {
-      margin-top: 1rem; }
-    #controls .rangeDiv .left {
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    transition: all 0.4s;
+
+    &:first-child{
+      margin-top: 1rem;
+    }
+
+
+    .left{
       float: left;
-      font-size: 1rem; }
-    #controls .rangeDiv .right {
+      font-size: 1rem;
+    }
+
+    .right{
       float: right;
-      font-size: 1rem; }
-    #controls .rangeDiv .label {
+      font-size: 1rem;
+    }
+
+    .label{
       position: absolute;
       top: -0.25rem;
       left: 0;
       width: 100%;
       text-align: center;
-      font-weight: bold; }
-  #controls #loadImages {
+      font-weight: bold;
+    }
+  }
+
+  #loadImages{
     display: block;
     padding: 0.5rem;
     text-transform: uppercase;
@@ -135,25 +169,30 @@ canvas {
     margin-top: 1rem;
     width: 100%;
     font-size: 1.25rem;
-    transition: all 0.4s; }
-  #controls.hidden {
+    transition: all 0.4s;
+  }
+
+  &.hidden{
     background: transparent;
-    border-color: transparent; }
-    #controls.hidden #minMax {
+    border-color: transparent;
+
+    #minMax{
       background: rgba(255, 192, 203, 0.5);
-      color: pink; }
-      #controls.hidden #minMax .fa {
-        -ms-transform: rotate(180deg);
-        /* IE 9 */
-        -webkit-transform: rotate(180deg);
-        /* Chrome, Safari, Opera */
-        transform: rotate(180deg); }
-    #controls.hidden .rangeDiv,
-    #controls.hidden #loadImages {
+      color: pink;
+
+      .fa{
+        -ms-transform: rotate(180deg); /* IE 9 */
+        -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+        transform: rotate(180deg);
+      }
+    }
+    .rangeDiv,
+    #loadImages{
       height: 0;
       padding: 0;
       margin: 0;
       overflow: hidden;
-      opacity: 0; }
-
-/*# sourceMappingURL=styles.css.map */
+      opacity: 0;
+    }
+  }
+}
