@@ -11,17 +11,10 @@ window.onload = function(){
     speedCoeff = document.getElementById('speedCoeff').value || 0.5,
     yaxis = new THREE.Vector3(0,1,0),
     renderer = new THREE.WebGLRenderer(),
-    loader = new THREE.TextureLoader(),
+    loader =  new THREE.TextureLoader().setCrossOrigin('anonymous'),
     scene = new THREE.Scene().add( new THREE.AmbientLight(0xffffff) ),
-    camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      4 * 1024 * 16 / Math.PI
-    );
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
 
-  loader = new THREE.TextureLoader();
-  loader.crossOrigin = 'anonymous';
   function loadImages(){
     images = [];
     imagesLoaded = false;
@@ -33,6 +26,7 @@ window.onload = function(){
     var galleryPhi = 2 * Math.PI / numImages;
     if( camera.position.length() > galleryRadius ){ camera.position.set(0,0,0); }
 
+    for(var i=0; i < numImages; i++){ loadImage(i); }
     function loadImage(ind){
       loader.load(
         'https://unsplash.it/1024/512/?random&nocache' + ind + Date.now(),
@@ -59,9 +53,6 @@ window.onload = function(){
           loadImage(ind);
         }
       );
-    }
-    for(var i=0; i < numImages; i++){
-      loadImage(i);
     }
   }
   loadImages();
@@ -179,7 +170,7 @@ window.onload = function(){
           .multiplyScalar( speedCoeff * galleryRadius * (new THREE.Vector2( e.clientX, e.clientY ).distanceTo( new THREE.Vector2(mouseDown.clientX,mouseDown.clientY) ) ) / window.innerWidth / 10 ) 
           .add( origin['position'] );    
         if( newPos.length() < 0.9 * galleryRadius ){
-          camera.position.set( newPos.x, newPos.y, newPos.z);
+          camera.position.set( newPos.x, 0, newPos.z);
         }
       }
     },
@@ -205,7 +196,7 @@ window.onload = function(){
         .multiplyScalar( speedCoeff * 10 * numImages )
         .add( camera.position );
       if( newPos.length() < 0.9 * galleryRadius ){
-        camera.position.set( newPos.x, newPos.y, newPos.z );
+        camera.position.set( newPos.x, 0, newPos.z );
       }
     }
     else{
