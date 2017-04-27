@@ -8,6 +8,7 @@ window.onload = function(){
     mouseDown = false,
     keyDown = [],
     origin,
+    speedCoeff = document.getElementById('speedCoeff').value,
     yaxis = new THREE.Vector3(0,1,0),
     scene = new THREE.Scene(),
     renderer = new THREE.WebGLRenderer(),
@@ -90,11 +91,23 @@ window.onload = function(){
     false
   );
 
-  document.getElementById('button--loadImages').addEventListener(
+  document.getElementById('close').addEventListener(
+    'click',
+    function(){ this.parentNode.style.display = 'none'; },
+    false
+  );
+
+  document.getElementById('loadImages').addEventListener(
     'click',
     loadImages,
     false
   );
+
+  document.getElementById('speedCoeff').addEventListener(
+    'change',
+    function(){ speedCoeff = document.getElementById('speedCoeff').value; },
+    false
+  );  
 
   document.getElementById('numImages').addEventListener(
     'change',
