@@ -57,13 +57,17 @@ canvas {
   right: 2rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  color: yellow;
-  background: rgba(0, 0, 255, 0.5);
+  color: magenta;
+  background: rgba(255, 0, 0, 0.5);
   border: 1px solid white; }
   #instructions #close {
     text-align: right;
     font-size: 1.75rem;
     cursor: pointer; }
+    #instructions #close .fa {
+      border-radius: 0.25rem;
+      border: 1px solid blue;
+      padding: 0; }
   #instructions .text {
     margin: 0.5rem 0;
     font-size: 1.2rem; }
