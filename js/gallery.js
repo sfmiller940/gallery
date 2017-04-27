@@ -73,51 +73,6 @@ window.onload = function(){
   }
   render();
 
-  window.addEventListener(
-    'resize',
-    function () {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize( window.innerWidth, window.innerHeight );
-    }, 
-    false
-  );
-
-  document.getElementById('close').addEventListener(
-    'click',
-    function(){ this.parentNode.style.display = 'none'; },
-    false
-  );
-
-  document.getElementById('loadImages').addEventListener(
-    'click',
-    function(){
-      loadImages();
-      this.blur();
-    },
-    false
-  );
-
-  document.getElementById('speedCoeff').addEventListener(
-    'change',
-    function(){ 
-      speedCoeff = document.getElementById('speedCoeff').value;
-      document.getElementById('speedCoeffLabel').innerHTML = 'Speed: ' + Math.round( document.getElementById('speedCoeff').value * 100 ) + '%';
-      this.blur();
-    },
-    false
-  );  
-
-  document.getElementById('numImages').addEventListener(
-    'change',
-    function(){
-      loadImages();
-      document.getElementById('numImagesLabel').innerHTML = 'Images: ' + document.getElementById('numImages').value;
-      this.blur();
-    },
-    false
-  );  
-
   document.addEventListener(
     'keydown',
     function(e){ 
@@ -132,6 +87,33 @@ window.onload = function(){
     function(e){ keyDown[e.key]=false; },
     false
   );
+
+  function keyNav(){
+    var newPos = new THREE.Vector3(0,0,0);
+    if( keyDown['ArrowLeft'] || keyDown['ArrowRight'] || keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
+      document.body.classList.add('keyDown');
+      if( keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
+        newPos.add( camera.getWorldDirection().multiplyScalar( keyDown['ArrowUp'] ? 1 : -1 ) );
+      }
+      if( keyDown['ArrowLeft'] || keyDown['ArrowRight']){
+        if( keyDown['Shift'] ){
+          newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 2));
+        } else {
+          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * speedCoeff * Math.PI / 90;
+        }
+      }
+      newPos
+        .normalize()
+        .multiplyScalar( speedCoeff * 10 * numImages )
+        .add( camera.position );
+      if( newPos.length() < 0.9 * galleryRadius ){
+        camera.position.set( newPos.x, 0, newPos.z );
+      }
+    }
+    else{
+      document.body.classList.remove('keyDown')
+    }
+  } 
 
   document.addEventListener(
     'mousedown', 
@@ -179,30 +161,48 @@ window.onload = function(){
     false
   );
 
-  function keyNav(){
-    var newPos = new THREE.Vector3(0,0,0);
-    if( keyDown['ArrowLeft'] || keyDown['ArrowRight'] || keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
-      document.body.classList.add('keyDown');
-      if( keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
-        newPos.add( camera.getWorldDirection().multiplyScalar( keyDown['ArrowUp'] ? 1 : -1 ) );
-      }
-      if( keyDown['ArrowLeft'] || keyDown['ArrowRight']){
-        if( keyDown['Shift'] ){
-          newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 2));
-        } else {
-          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * speedCoeff * Math.PI / 90;
-        }
-      }
-      newPos
-        .normalize()
-        .multiplyScalar( speedCoeff * 10 * numImages )
-        .add( camera.position );
-      if( newPos.length() < 0.9 * galleryRadius ){
-        camera.position.set( newPos.x, 0, newPos.z );
-      }
-    }
-    else{
-      document.body.classList.remove('keyDown')
-    }
-  }
+  document.getElementById('close').addEventListener(
+    'click',
+    function(){ this.parentNode.style.display = 'none'; },
+    false
+  );
+
+  document.getElementById('speedCoeff').addEventListener(
+    'change',
+    function(){ 
+      speedCoeff = document.getElementById('speedCoeff').value;
+      document.getElementById('speedCoeffLabel').innerHTML = 'Speed: ' + Math.round( document.getElementById('speedCoeff').value * 100 ) + '%';
+      this.blur();
+    },
+    false
+  );  
+
+  document.getElementById('numImages').addEventListener(
+    'change',
+    function(){
+      loadImages();
+      document.getElementById('numImagesLabel').innerHTML = 'Images: ' + document.getElementById('numImages').value;
+      this.blur();
+    },
+    false
+  );  
+
+  document.getElementById('loadImages').addEventListener(
+    'click',
+    function(){
+      loadImages();
+      this.blur();
+    },
+    false
+  );
+
+  window.addEventListener(
+    'resize',
+    function () {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+    }, 
+    false
+  );
 };
