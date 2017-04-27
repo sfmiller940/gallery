@@ -99,19 +99,28 @@ window.onload = function(){
 
   document.getElementById('loadImages').addEventListener(
     'click',
-    loadImages,
+    function(){
+      loadImages();
+      this.blur();
+    },
     false
   );
 
   document.getElementById('speedCoeff').addEventListener(
     'change',
-    function(){ speedCoeff = document.getElementById('speedCoeff').value; },
+    function(){ 
+      speedCoeff = document.getElementById('speedCoeff').value;
+      this.blur();
+    },
     false
   );  
 
   document.getElementById('numImages').addEventListener(
     'change',
-    loadImages,
+    function(){
+      loadImages();
+      this.blur();
+    },
     false
   );  
 
@@ -120,7 +129,6 @@ window.onload = function(){
     function(e){ 
       keyDown[e.key]=true;
       if( e.key === '-' ) camera.rotation.y += Math.PI;
-      console.log(e.key);
     },
     false
   );
@@ -153,20 +161,22 @@ window.onload = function(){
   document.addEventListener(
     'mousemove',
     function(e){
-      var gamma, newPos;
+      var newPos;
       if(mouseDown){
-        gamma = galleryRadius / window.innerWidth / 20;
         newPos = camera.getWorldDirection()
-          .multiplyScalar( gamma * (e.clientY - mouseDown.clientY) )
-          .add( origin['position'] );
+          .multiplyScalar( e.clientY - mouseDown.clientY );
         if(keyDown['Shift']){
           newPos.add( camera.getWorldDirection()
             .applyAxisAngle( yaxis, - Math.PI / 2)
-            .multiplyScalar( gamma * (e.clientX - mouseDown.clientX) ) 
+            .multiplyScalar( e.clientX - mouseDown.clientX ) 
           );
         } else {
-          camera.rotation.y = origin['angle'] + ( Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );
-        }          
+          camera.rotation.y = origin['angle'] + ( 2 * speedCoeff * Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );
+        }
+        newPos
+          .normalize()
+          .multiplyScalar( speedCoeff * galleryRadius * (new THREE.Vector2( e.clientX, e.clientY ).distanceTo( new THREE.Vector2(mouseDown.clientX,mouseDown.clientY) ) ) / window.innerWidth / 5 ) 
+          .add( origin['position'] );    
         if( newPos.length() < 0.9 * galleryRadius ){
           camera.position.set( newPos.x, newPos.y, newPos.z);
         }
@@ -186,10 +196,13 @@ window.onload = function(){
         if( keyDown['Shift'] ){
           newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 2));
         } else {
-          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 720;
+          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * speedCoeff * Math.PI / 90;
         }
       }
-      newPos.add( camera.position );
+      newPos
+        .normalize()
+        .multiplyScalar( speedCoeff * 10 * numImages )
+        .add( camera.position );
       if( newPos.length() < 0.9 * galleryRadius ){
         camera.position.set( newPos.x, newPos.y, newPos.z );
       }
