@@ -61,7 +61,7 @@ canvas{
 
 #close{
   text-align: right;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   cursor: pointer;
 }
 
@@ -77,10 +77,11 @@ canvas{
   text-align: center;
   background: rgba(0,255,0,0.5);
   color: pink;
-  padding: 1rem 0.5rem;
+  padding: 2rem 0.5rem 1rem;
   border-radius: 0.5rem;
   border: 1px solid white;
   font-size: 1.25rem;
+  transition: all 0.4s;
 }
 
 input[type="range"]{
@@ -105,6 +106,7 @@ input[type="range"]{
   margin-top: 1rem;
   width: 100%;
   font-size: 1.25rem;
+  transition: all 0.4s;
 }
 
 .rangeDiv{
@@ -114,6 +116,11 @@ input[type="range"]{
   padding-bottom: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid rgba(255,255,255,0.5);
+  transition: all 0.4s;
+}
+
+.rangeDiv:first-child{
+  margin-top: 1rem;
 }
 
 .left{
@@ -149,4 +156,44 @@ input[type="range"]{
   height: 1rem;
   width: 50%;
   border-radius:  0.5rem;
+}
+
+#minMax{
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  background: pink;
+  color: purple;
+  border: 1px solid magenta;
+  border-radius: 0.5rem;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+
+.hidden #minMax{
+  background: rgba(255, 192, 203, 0.5);
+  color: pink;
+}
+
+.hidden #minMax .fa{
+  -ms-transform: rotate(180deg); /* IE 9 */
+  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+  transform: rotate(180deg);
+}
+
+.hidden .rangeDiv,
+.hidden #loadImages{
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+#controls.hidden{
+  background: transparent;
+  border-color: rgba(0,0,0,0);
 }

@@ -99,12 +99,12 @@ window.onload = function(){
         if( keyDown['Shift'] ){
           newPos.add( camera.getWorldDirection().applyAxisAngle( yaxis, (keyDown['ArrowLeft'] ? 1 : -1) * Math.PI / 2));
         } else {
-          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * speedCoeff * Math.PI / 90;
+          camera.rotation.y += (keyDown['ArrowLeft'] ? 1 : -1) * speedCoeff * Math.PI / 60;
         }
       }
       newPos
         .normalize()
-        .multiplyScalar( speedCoeff * 10 * numImages )
+        .multiplyScalar( speedCoeff * 7 * numImages )
         .add( camera.position );
       if( newPos.length() < 0.9 * galleryRadius ){
         camera.position.set( newPos.x, 0, newPos.z );
@@ -191,6 +191,15 @@ window.onload = function(){
     'click',
     function(){
       loadImages();
+      this.blur();
+    },
+    false
+  );
+
+  document.getElementById('minMax').addEventListener(
+    'click',
+    function(){
+      this.parentNode.classList.toggle('hidden');
       this.blur();
     },
     false
