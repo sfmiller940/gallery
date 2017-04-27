@@ -19,6 +19,7 @@ window.onload = function(){
     images = [];
     imagesLoaded = false;
     document.body.classList.remove('imagesLoaded');
+    document.getElementById('loadingBar').style.width = 0 + '%';
     while(scene.children.length > 0){ scene.remove(scene.children[0]); }
 
     numImages = 1 * ( document.getElementById('numImages').value || 12 );
@@ -44,6 +45,7 @@ window.onload = function(){
             - galleryRadius * Math.cos( ind * galleryPhi ) 
           );
           images.push(image);
+          document.getElementById('loadingBar').style.width = Math.round( 100 * images.length / numImages ) + '%';
         },
         function ( xhr ) {
           console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -100,7 +102,7 @@ window.onload = function(){
     'change',
     function(){ 
       speedCoeff = document.getElementById('speedCoeff').value;
-      document.getElementById('speedCoeffLabel').innerHTML = 'Speed: ' + ( document.getElementById('speedCoeff').value * 100 ) + '%';
+      document.getElementById('speedCoeffLabel').innerHTML = 'Speed: ' + Math.round( document.getElementById('speedCoeff').value * 100 ) + '%';
       this.blur();
     },
     false

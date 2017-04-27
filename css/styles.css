@@ -134,3 +134,19 @@ input[type="range"]{
   text-align: center;
   font-weight: bold;
 }
+
+#loading{
+  display: inline-block;
+  width: 20rem;
+  background: rgba(255,255,255,0.5);
+  padding: 0.25rem;
+  border-radius:  0.5rem;
+  border: 1px solid white;
+}
+
+#loadingBar{
+  background: magenta;
+  height: 1rem;
+  width: 50%;
+  border-radius:  0.5rem;
+}
