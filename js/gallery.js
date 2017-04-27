@@ -23,41 +23,45 @@ window.onload = function(){
   loader = new THREE.TextureLoader();
   loader.crossOrigin = 'anonymous';
   function loadImages(){
-    imagesLoaded = false;
     images = [];
+    imagesLoaded = false;
+    document.body.classList.remove('imagesLoaded');
+    while(scene.children.length > 0){ scene.remove(scene.children[0]); }
+
     numImages = 1 * ( document.getElementById('numImages').value || 12 );
     galleryRadius = 1024 * numImages / Math.PI / 1.8;
     var galleryPhi = 2 * Math.PI / numImages;
     if( camera.position.length() > galleryRadius ){ camera.position.set(0,0,0); }
-    document.body.classList.remove('imagesLoaded');
-    while(scene.children.length > 0){ scene.remove(scene.children[0]); }
+
+    function loadImage(ind){
+      loader.load(
+        'https://unsplash.it/1024/512/?random&nocache' + ind + Date.now(),
+        function ( texture ) {
+          var image = new THREE.Mesh(
+            new THREE.PlaneGeometry(1024, 512), 
+            new THREE.MeshBasicMaterial({ map: texture })
+          );
+          image.minFilter = THREE.LinearFilter;
+          image.overdraw = true;
+          image.rotation.y = - ind * galleryPhi;
+          image.position.set(
+            galleryRadius * Math.sin( ind * galleryPhi ),
+            0,
+            - galleryRadius * Math.cos( ind * galleryPhi ) 
+          );
+          images.push(image);
+        },
+        function ( xhr ) {
+          console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+        function ( xhr ) {
+          console.log( 'An error happened' );
+          loadImage(ind);
+        }
+      );
+    }
     for(var i=0; i < numImages; i++){
-      (function(ind){
-        loader.load(
-          'https://unsplash.it/1024/512/?random&nocache' + ind + Date.now(),
-          function ( texture ) {
-            var image = new THREE.Mesh(
-              new THREE.PlaneGeometry(1024, 512), 
-              new THREE.MeshBasicMaterial({ map: texture })
-            );
-            image.minFilter = THREE.LinearFilter;
-            image.overdraw = true;
-            image.rotation.y = - ind * galleryPhi;
-            image.position.set(
-              galleryRadius * Math.sin( ind * galleryPhi ),
-              0,
-              - galleryRadius * Math.cos( ind * galleryPhi ) 
-            );
-            images.push(image);
-          },
-          function ( xhr ) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-          },
-          function ( xhr ) {
-            console.log( 'An error happened' );
-          }
-        );
-      })(i);
+      loadImage(i);
     }
   }
   loadImages();
