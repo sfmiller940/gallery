@@ -14,14 +14,17 @@ window.onload = function(){
     loader =  new THREE.TextureLoader().setCrossOrigin('anonymous'),
     scene = new THREE.Scene().add( new THREE.AmbientLight(0xffffff) ),
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 ),
-    loadingBar = document.getElementById('loadingBar');
+    loadingBar = document.getElementById('loadingBar'),
+    numStars = 1000,
+    starCloud,
+    starPaths=[];
 
   function loadImages(){
+    images.forEach(function(image){ scene.remove(image); });
     images = [];
     imagesLoaded = false;
     document.body.classList.remove('imagesLoaded');
     loadingBar.style.width = 0 + '%';
-    while(scene.children.length > 0){ scene.remove(scene.children[0]); }
 
     numImages = 1 * ( document.getElementById('numImages').value || 12 );
     galleryRadius = 1024 * numImages / Math.PI / 1.8;
@@ -59,6 +62,7 @@ window.onload = function(){
     }
   }
   loadImages();
+  loadStars();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -69,6 +73,8 @@ window.onload = function(){
       document.body.classList.add('imagesLoaded');      
     }
     keyNav();
+    moveStars();
+    starCloud.geometry.verticesNeedUpdate = true;
     renderer.render(scene, camera);
     requestAnimationFrame( render );
   }
@@ -215,4 +221,25 @@ window.onload = function(){
     }, 
     false
   );
+
+  function loadStars(){
+    var starSpace = new THREE.Geometry();
+    for(var i=0; i<numStars; i++){
+      starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000));
+      starSpace.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
+      starPaths.push( new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ) );
+    }
+    var starStuff = new THREE.PointsMaterial({
+      size: 12,
+      vertexColors: THREE.VertexColors
+    });
+    starCloud = new THREE.Points(starSpace, starStuff);
+    scene.add(starCloud);
+  }
+
+  function moveStars(){
+    starCloud.geometry.vertices.forEach(function(vertex,i){
+      vertex.applyAxisAngle( starPaths[i], 0.0002 );
+    });
+  }
 };
