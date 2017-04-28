@@ -18,20 +18,24 @@ window.onload = function(){
     starCloud,
     starPaths=[];
 
+  loadImages();
   function loadImages(){
     if(!imagesLoaded) return(false);
 
+    //Unload
     images.forEach(function(image){ scene.remove(image); });
     images = [];
     imagesLoaded = false;
     loadingBar.style.width = 0 + '%';
     document.body.classList.remove('imagesLoaded');
 
+    //Preload
     numImages = 1 * ( document.getElementById('numImages').value || 12 );
     galleryRadius = 1024 * numImages / Math.PI / 1.8;
     var galleryPhi = 2 * Math.PI / numImages;
     if( camera.position.length() > galleryRadius ){ camera.position.set(0,0,0); }
 
+    //Load
     for(var i=0; i < numImages; i++){ loadImage(i); }
     function loadImage(ind){
       loader.load(
@@ -59,13 +63,13 @@ window.onload = function(){
     }
     return true;
   }
-  loadImages();
 
+  loadStars();
   function loadStars(){
     var starSpace = new THREE.Geometry();
     for(var i=0; i<1000; i++){
       starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000 + (2000 * Math.random())));
-      starSpace.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
+      starSpace.colors.push(new THREE.Color( Math.random(), Math.random(), Math.random()));
       starPaths.push( { 'dir': new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ), 'speed' : 0.0015 * Math.random() } );
     }
     starCloud = new THREE.Points(
@@ -74,30 +78,33 @@ window.onload = function(){
     );
     scene.add(starCloud);
   }
-
   function moveStars(){
     starCloud.geometry.vertices.forEach(function(vertex,i){
       vertex.applyAxisAngle( starPaths[i]['dir'], starPaths[i]['speed'] );
     });
   }
-  loadStars();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+  render();
   function render() {
+
     if( ! imagesLoaded && images.length === numImages){
       images.forEach(function(image){ scene.add(image); });
       imagesLoaded = true;
       document.body.classList.add('imagesLoaded');      
     }
+
     keyNav();
+
     moveStars();
     starCloud.geometry.verticesNeedUpdate = true;
+    
     renderer.render(scene, camera);
     requestAnimationFrame( render );
   }
-  render();
 
+  // Nav
   document.addEventListener(
     'keydown',
     function(e){ 
@@ -106,13 +113,11 @@ window.onload = function(){
     },
     false
   );
-
   document.addEventListener(
     'keyup',
     function(e){ keyDown[e.key]=false; },
     false
   );
-
   function keyNav(){
     var newPos = new THREE.Vector3(0,0,0);
     if( keyDown['ArrowLeft'] || keyDown['ArrowRight'] || keyDown['ArrowUp'] || keyDown['ArrowDown'] ){
@@ -139,7 +144,6 @@ window.onload = function(){
       document.body.classList.remove('keyDown')
     }
   } 
-
   document.addEventListener(
     'mousedown', 
     function(e){
@@ -149,7 +153,6 @@ window.onload = function(){
     },
     false
   );
-
   document.addEventListener(
     'mouseup',
     function(e){ 
@@ -158,7 +161,6 @@ window.onload = function(){
     },
     false
   );
-
   document.addEventListener(
     'mousemove',
     function(e){
@@ -186,12 +188,20 @@ window.onload = function(){
     false
   );
 
+  //UI
   document.getElementById('close').addEventListener(
     'click',
     function(){ this.parentNode.style.display = 'none'; },
     false
   );
-
+  document.getElementById('minMax').addEventListener(
+    'click',
+    function(){
+      this.parentNode.classList.toggle('hidden');
+      this.blur();
+    },
+    false
+  );
   document.getElementById('speedCoeff').addEventListener(
     'change',
     function(){ 
@@ -201,7 +211,6 @@ window.onload = function(){
     },
     false
   );  
-
   document.getElementById('numImages').addEventListener(
     'change',
     function(){
@@ -213,20 +222,10 @@ window.onload = function(){
     },
     false
   );  
-
   document.getElementById('loadImages').addEventListener(
     'click',
     function(){
       loadImages();
-      this.blur();
-    },
-    false
-  );
-
-  document.getElementById('minMax').addEventListener(
-    'click',
-    function(){
-      this.parentNode.classList.toggle('hidden');
       this.blur();
     },
     false
