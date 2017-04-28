@@ -4,7 +4,7 @@ window.onload = function(){
   var numImages,
     images = [],
     galleryRadius,
-    imagesLoaded = false,
+    imagesLoaded = true,
     mouseDown = false,
     keyDown = [],
     origin,
@@ -15,11 +15,11 @@ window.onload = function(){
     scene = new THREE.Scene().add( new THREE.AmbientLight(0xffffff) ),
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 ),
     loadingBar = document.getElementById('loadingBar'),
-    numStars = 1000,
     starCloud,
     starPaths=[];
 
   function loadImages(){
+    if(!imagesLoaded) return(false);
     images.forEach(function(image){ scene.remove(image); });
     images = [];
     imagesLoaded = false;
@@ -60,8 +60,30 @@ window.onload = function(){
         }
       );
     }
+    return true;
   }
   loadImages();
+
+  function loadStars(){
+    var starSpace = new THREE.Geometry();
+    for(var i=0; i<1000; i++){
+      starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000));
+      starSpace.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
+      starPaths.push( new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ) );
+    }
+    var starStuff = new THREE.PointsMaterial({
+      size: 12,
+      vertexColors: THREE.VertexColors
+    });
+    starCloud = new THREE.Points(starSpace, starStuff);
+    scene.add(starCloud);
+  }
+
+  function moveStars(){
+    starCloud.geometry.vertices.forEach(function(vertex,i){
+      vertex.applyAxisAngle( starPaths[i], 0.0002 );
+    });
+  }
   loadStars();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -113,7 +135,7 @@ window.onload = function(){
         .normalize()
         .multiplyScalar( speedCoeff * 7 * numImages )
         .add( camera.position );
-      if( newPos.length() < 0.9 * galleryRadius ){
+      if( newPos.length() < 0.95 * galleryRadius ){
         camera.position.set( newPos.x, 0, newPos.z );
       }
     }
@@ -160,7 +182,7 @@ window.onload = function(){
           .normalize()
           .multiplyScalar( speedCoeff * galleryRadius * (new THREE.Vector2( e.clientX, e.clientY ).distanceTo( new THREE.Vector2(mouseDown.clientX,mouseDown.clientY) ) ) / window.innerWidth / 10 ) 
           .add( origin['position'] );    
-        if( newPos.length() < 0.9 * galleryRadius ){
+        if( newPos.length() < 0.95 * galleryRadius ){
           camera.position.set( newPos.x, 0, newPos.z);
         }
       }
@@ -187,8 +209,9 @@ window.onload = function(){
   document.getElementById('numImages').addEventListener(
     'change',
     function(){
-      loadImages();
-      document.getElementById('numImagesLabel').innerHTML = 'Images: ' + this.value;
+      if( loadImages() ){
+        document.getElementById('numImagesLabel').innerHTML = 'Images: ' + this.value;
+      }
       this.blur();
     },
     false
@@ -221,25 +244,4 @@ window.onload = function(){
     }, 
     false
   );
-
-  function loadStars(){
-    var starSpace = new THREE.Geometry();
-    for(var i=0; i<numStars; i++){
-      starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000));
-      starSpace.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
-      starPaths.push( new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ) );
-    }
-    var starStuff = new THREE.PointsMaterial({
-      size: 12,
-      vertexColors: THREE.VertexColors
-    });
-    starCloud = new THREE.Points(starSpace, starStuff);
-    scene.add(starCloud);
-  }
-
-  function moveStars(){
-    starCloud.geometry.vertices.forEach(function(vertex,i){
-      vertex.applyAxisAngle( starPaths[i], 0.0002 );
-    });
-  }
 };
