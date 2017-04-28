@@ -13,13 +13,14 @@ window.onload = function(){
     renderer = new THREE.WebGLRenderer(),
     loader =  new THREE.TextureLoader().setCrossOrigin('anonymous'),
     scene = new THREE.Scene().add( new THREE.AmbientLight(0xffffff) ),
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 ),
+    loadingBar = document.getElementById('loadingBar');
 
   function loadImages(){
     images = [];
     imagesLoaded = false;
     document.body.classList.remove('imagesLoaded');
-    document.getElementById('loadingBar').style.width = 0 + '%';
+    loadingBar.style.width = 0 + '%';
     while(scene.children.length > 0){ scene.remove(scene.children[0]); }
 
     numImages = 1 * ( document.getElementById('numImages').value || 12 );
@@ -45,7 +46,7 @@ window.onload = function(){
             - galleryRadius * Math.cos( ind * galleryPhi ) 
           );
           images.push(image);
-          document.getElementById('loadingBar').style.width = Math.round( 100 * images.length / numImages ) + '%';
+          loadingBar.style.width = Math.round( 100 * images.length / numImages ) + '%';
         },
         function ( xhr ) {
           console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -170,8 +171,8 @@ window.onload = function(){
   document.getElementById('speedCoeff').addEventListener(
     'change',
     function(){ 
-      speedCoeff = document.getElementById('speedCoeff').value;
-      document.getElementById('speedCoeffLabel').innerHTML = 'Speed: ' + Math.round( document.getElementById('speedCoeff').value * 100 ) + '%';
+      speedCoeff = this.value;
+      document.getElementById('speedCoeffLabel').innerHTML = 'Speed: ' + Math.round( this.value * 100 ) + '%';
       this.blur();
     },
     false
@@ -181,7 +182,7 @@ window.onload = function(){
     'change',
     function(){
       loadImages();
-      document.getElementById('numImagesLabel').innerHTML = 'Images: ' + document.getElementById('numImages').value;
+      document.getElementById('numImagesLabel').innerHTML = 'Images: ' + this.value;
       this.blur();
     },
     false
