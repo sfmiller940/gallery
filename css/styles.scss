@@ -36,10 +36,8 @@ canvas{
   width: 100%;
   top: 50%;
   color: #fff;
-  font-size: 8rem;
-  margin-top: -4rem;
+  margin-top: -5rem;
   text-align: center;
-  opacity: 0.5;
   pointer-events: none;
   transition: opacity 0.4s;
 
@@ -47,17 +45,23 @@ canvas{
     opacity: 0;
   }
 
+  .fa{
+    font-size: 10rem;
+    opacity: 0.4;
+  }
+
   #loading{
     display: inline-block;
     width: 20rem;
-    background: rgba(255,255,255,0.5);
+    background: rgba(255,555,255,0.4);
     padding: 0.25rem;
+    margin-top: 4rem;
     border-radius:  0.5rem;
     border: 1px solid white;
   }
 
   #loadingBar{
-    background: magenta;
+    background: #fff;
     height: 1rem;
     width: 50%;
     border-radius:  0.5rem;
@@ -140,7 +144,6 @@ canvas{
       margin-top: 1rem;
     }
 
-
     .left{
       float: left;
       font-size: 1rem;
@@ -181,7 +184,7 @@ canvas{
   &.hidden{
     background: transparent;
     border-color: transparent;
-
+    
     #minMax{
       background: rgba(255, 192, 203, 0.5);
       color: pink;
