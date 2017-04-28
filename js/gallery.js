@@ -67,7 +67,7 @@ window.onload = function(){
   function loadStars(){
     var starSpace = new THREE.Geometry();
     for(var i=0; i<1000; i++){
-      starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000));
+      starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000 + (2000 * Math.random())));
       starSpace.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
       starPaths.push( new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ) );
     }
@@ -212,6 +212,7 @@ window.onload = function(){
       if( loadImages() ){
         document.getElementById('numImagesLabel').innerHTML = 'Images: ' + this.value;
       }
+      else{ this.value = numImages; }
       this.blur();
     },
     false
