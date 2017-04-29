@@ -48,7 +48,7 @@ canvas {
     border-radius: 0.5rem;
     border: 1px solid white; }
   #spinner #loadingBar {
-    background: #fff;
+    background: MidnightBlue;
     height: 1rem;
     width: 50%;
     border-radius: 0.5rem; }

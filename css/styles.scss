@@ -61,7 +61,7 @@ canvas{
   }
 
   #loadingBar{
-    background: #fff;
+    background: MidnightBlue;
     height: 1rem;
     width: 50%;
     border-radius:  0.5rem;
@@ -195,6 +195,7 @@ canvas{
         transform: rotate(180deg);
       }
     }
+    
     .rangeDiv,
     #loadImages{
       height: 0;
