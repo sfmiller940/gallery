@@ -2,21 +2,21 @@
 window.onload = function(){
 
   var numImages,
-    images = [],
     galleryRadius,
+    starCloud,
+    origin,
     imagesLoaded = true,
     mouseDown = false,
+    images = [],
     keyDown = [],
-    origin,
+    starPaths=[],
+    loadingBar = document.getElementById('loadingBar'),
     speedCoeff = document.getElementById('speedCoeff').value || 0.5,
     yaxis = new THREE.Vector3(0,1,0),
-    renderer = new THREE.WebGLRenderer(),
     loader =  new THREE.TextureLoader().setCrossOrigin('anonymous'),
     scene = new THREE.Scene().add( new THREE.AmbientLight(0xffffff) ),
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 ),
-    loadingBar = document.getElementById('loadingBar'),
-    starCloud,
-    starPaths=[];
+    renderer = new THREE.WebGLRenderer();
 
   loadImages();
   function loadImages(){
@@ -70,7 +70,7 @@ window.onload = function(){
     for(var i=0; i<1000; i++){
       starSpace.vertices.push( new THREE.Vector3( 0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ).normalize().multiplyScalar(4000 + (2000 * Math.random())));
       starSpace.colors.push(new THREE.Color( Math.random(), Math.random(), Math.random()));
-      starPaths.push( { 'dir': new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ), 'speed' : 0.0015 * Math.random() } );
+      starPaths.push( { 'axis': new THREE.Vector3(0.5 - Math.random(), 0.5 - Math.random(), 0.5 - Math.random() ), 'speed' : 0.0015 * Math.random() } );
     }
     starCloud = new THREE.Points(
       starSpace,
@@ -80,7 +80,7 @@ window.onload = function(){
   }
   function moveStars(){
     starCloud.geometry.vertices.forEach(function(vertex,i){
-      vertex.applyAxisAngle( starPaths[i]['dir'], starPaths[i]['speed'] );
+      vertex.applyAxisAngle( starPaths[i]['axis'], starPaths[i]['speed'] );
     });
   }
 

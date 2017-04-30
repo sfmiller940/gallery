@@ -30,7 +30,6 @@ canvas {
   width: 100%;
   top: 50%;
   color: #fff;
-  margin-top: -5rem;
   text-align: center;
   pointer-events: none;
   transition: opacity 0.4s; }
@@ -38,6 +37,7 @@ canvas {
     opacity: 0; }
   #spinner .fa {
     font-size: 10rem;
+    margin-top: -5rem;
     opacity: 0.4; }
   #spinner #loading {
     display: inline-block;
@@ -50,7 +50,7 @@ canvas {
   #spinner #loadingBar {
     background: MidnightBlue;
     height: 1rem;
-    width: 50%;
+    width: 0%;
     border-radius: 0.5rem; }
 
 #instructions {

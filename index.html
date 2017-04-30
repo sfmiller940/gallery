@@ -12,7 +12,9 @@
   <!-- for Facebook -->          
   <meta property="og:title" content="gallery" />
   <meta property="og:type" content="article" />
-  <meta property="og:image" content="img/social.png" />
+  <meta property="og:image" content="http://poibella.org/gallery/img/social.png" />
+  <meta property="og:image:width" content="844" />
+  <meta property="og:image:height" content="426" />
   <meta property="og:url" content="http://poibella.org/gallery" />
   <meta property="og:description" content="Image gallery using THREE.js" />
 
@@ -21,6 +23,8 @@
   <meta name="twitter:title" content="gallery" />
   <meta name="twitter:description" content="Image gallery using THREE.js" />
   <meta name="twitter:image" content="img/social.png" />
+
+
 
   <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -34,13 +38,16 @@
 
 </head>
 <body>
+
   <div id="bullseye">
     <i class="fa fa-bullseye"></i>
   </div>
+  
   <div id="spinner">
     <i class="fa fa-spinner fa-pulse"></i><br>
     <div id="loading"><div id="loadingBar"></div></div>
   </div>
+
   <div id="controls">
     <div class="rangeDiv">
       <div class="left">0</div>
@@ -57,6 +64,7 @@
     <button id="loadImages">Load New Images</button>
     <div id="minMax"><i class="fa fa-caret-down"></i></div>
   </div>
+
   <div id="instructions">
     <div id="close"><i class="fa fa-window-close"></i></div>
     <table class="text">
