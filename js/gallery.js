@@ -4,7 +4,7 @@ window.onload = function(){
   var numImages,
     galleryRadius,
     starCloud,
-    origin,
+    origin = { 'angle': 0, 'position' : new THREE.Vector3(0,0,0)},
     imagesLoaded = true,
     mouseDown = false,
     images = [],
@@ -135,7 +135,7 @@ window.onload = function(){
       newPos
         .normalize()
         .multiplyScalar( speedCoeff * 7 * numImages )
-        .add( origin['position'] );
+        .add( camera.position );
       if( newPos.length() < 0.95 * galleryRadius ){
         camera.position.set( newPos.x, 0, newPos.z );
       }
