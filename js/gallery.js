@@ -135,7 +135,7 @@ window.onload = function(){
       newPos
         .normalize()
         .multiplyScalar( speedCoeff * 7 * numImages )
-        .add( camera.position );
+        .add( origin['position'] );
       if( newPos.length() < 0.95 * galleryRadius ){
         camera.position.set( newPos.x, 0, newPos.z );
       }
@@ -147,9 +147,11 @@ window.onload = function(){
   document.addEventListener(
     'mousedown', 
     function(e){
-      mouseDown = e;
-      origin = { 'angle' : camera.rotation.y, 'position' : camera.position };
-      document.body.classList.add('mouseDown');
+      if(!mouseDown){
+        mouseDown = e;
+        origin = { 'angle' : camera.rotation.y, 'position' : camera.position };
+        document.body.classList.add('mouseDown');
+      }
     },
     false
   );
