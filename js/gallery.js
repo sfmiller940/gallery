@@ -4,7 +4,7 @@ window.onload = function(){
   var numImages,
     galleryRadius,
     starCloud,
-    origin = { 'angle': 0, 'position' : new THREE.Vector3(0,0,0)},
+    origin,
     imagesLoaded = true,
     mouseDown = false,
     images = [],
