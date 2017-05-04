@@ -179,8 +179,7 @@ window.onload = function(){
           camera.rotation.y = origin['angle'] + ( 1.5 * speedCoeff * Math.PI * ( e.clientX - mouseDown.clientX ) / window.innerWidth );
         }
         newPos
-          .normalize()
-          .multiplyScalar( speedCoeff * galleryRadius * (new THREE.Vector2( e.clientX, e.clientY ).distanceTo( new THREE.Vector2(mouseDown.clientX,mouseDown.clientY) ) ) / window.innerWidth / 10 ) 
+          .multiplyScalar( speedCoeff * galleryRadius / window.innerWidth / 10 ) 
           .add( origin['position'] );    
         if( newPos.length() < 0.95 * galleryRadius ){
           camera.position.set( newPos.x, 0, newPos.z);
